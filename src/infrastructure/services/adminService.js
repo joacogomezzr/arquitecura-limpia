@@ -1,17 +1,16 @@
-// src/services/adminService.js
+// src/infrastructure/services/adminService.js
 const API_URL = "http://127.0.0.1:8080/api/v1/admins";
 
-// Función para mapear los nombres de campos entre frontend y backend
 const mapAdminToBackend = (adminData) => ({
-  name: adminData.username,  // Mapea username -> name para el backend
+  name: adminData.username,
   email: adminData.email,
-  ...(adminData.password && { password: adminData.password }), // Solo incluir si existe
-  ...(adminData.role && { role: adminData.role }) // Solo incluir si existe
+  ...(adminData.password && { password: adminData.password }),
+  ...(adminData.role && { role: adminData.role })
 });
 
 const mapAdminToFrontend = (adminData) => ({
   ...adminData,
-  username: adminData.name // Mapea name -> username para el frontend
+  username: adminData.name
 });
 
 export const createAdmin = async (adminData) => {
@@ -21,6 +20,7 @@ export const createAdmin = async (adminData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(mapAdminToBackend(adminData)),
+    credentials: 'include'
   });
 
   if (!response.ok) {
@@ -33,12 +33,14 @@ export const createAdmin = async (adminData) => {
 };
 
 export const getAdmins = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    credentials: 'include'
+  });
+  
   if (!response.ok) throw new Error("Error al obtener administradores");
   
   const data = await response.json();
   
-  // Procesar la respuesta según su estructura
   let admins = [];
   if (Array.isArray(data)) {
     admins = data;
@@ -46,7 +48,6 @@ export const getAdmins = async () => {
     admins = data.data;
   }
 
-  // Mapear cada admin al formato del frontend
   return admins.map(mapAdminToFrontend);
 };
 
@@ -57,6 +58,7 @@ export const updateAdmin = async (id, adminData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(mapAdminToBackend(adminData)),
+    credentials: 'include'
   });
 
   if (!response.ok) {
@@ -71,6 +73,7 @@ export const updateAdmin = async (id, adminData) => {
 export const deleteAdmin = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    credentials: 'include'
   });
 
   if (!response.ok) {

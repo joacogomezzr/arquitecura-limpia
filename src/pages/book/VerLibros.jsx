@@ -1,166 +1,32 @@
-import { useState, useEffect } from "react";
-import Header from "../components/Header";
-import styles from "../styles/VerLibros.module.css";
-
-const API_URL = "http://127.0.0.1:8080/api/v1/books";
+// src/pages/VerLibros.js
+import Header from "../../components/Header";
+import styles from "../../styles/VerLibros.module.css";
+import { useLibros } from "../../applications/hooks/useLibros";
 
 export default function VerLibros() {
-  const [libros, setLibros] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
-  const [busqueda, setBusqueda] = useState("");
-  const [orden, setOrden] = useState({ campo: 'title', direccion: 'asc' });
-  const [editandoLibro, setEditandoLibro] = useState(null);
-  const [formularioLibro, setFormularioLibro] = useState({
-    title: "",
-    author: "",
-    year: ""
-  });
-  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
-  const [libroAEliminar, setLibroAEliminar] = useState(null);
-  const [mensajeAlerta, setMensajeAlerta] = useState({ texto: "", tipo: "" });
-
-  useEffect(() => {
-    cargarLibros();
-  }, []);
-
-  const cargarLibros = async () => {
-    try {
-      setCargando(true);
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Error al cargar libros");
-      const data = await response.json();
-
-      const librosArray = Array.isArray(data)
-        ? data
-        : Array.isArray(data.data)
-        ? data.data
-        : [];
-
-      setLibros(librosArray);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  const mostrarAlerta = (texto, tipo) => {
-    setMensajeAlerta({ texto, tipo });
-    setTimeout(() => setMensajeAlerta({ texto: "", tipo: "" }), 5000);
-  };
-
-  const handleOrdenar = (campo) => {
-    setOrden(prev => ({
-      campo,
-      direccion: prev.campo === campo && prev.direccion === 'asc' ? 'desc' : 'asc'
-    }));
-  };
-
-  const handleEditar = (libro) => {
-    setEditandoLibro(libro);
-    setFormularioLibro({
-      title: libro.title || "",
-      author: libro.author || "",
-      year: libro.year || ""
-    });
-  };
-
-  const handleCancelarEdicion = () => {
-    setEditandoLibro(null);
-  };
-
-  const handleChangeFormulario = (e) => {
-    const { name, value } = e.target;
-    setFormularioLibro(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleGuardarEdicion = async (e) => {
-    e.preventDefault();
-    
-    try {
-      const response = await fetch(`${API_URL}/${editandoLibro.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: formularioLibro.title,
-          author: formularioLibro.author,
-          year: parseInt(formularioLibro.year, 10)
-        }),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error al actualizar el libro");
-      }
-
-      setLibros(prevLibros => 
-        prevLibros.map(libro => 
-          libro.id === editandoLibro.id ? { 
-            ...libro, 
-            title: formularioLibro.title,
-            author: formularioLibro.author,
-            year: formularioLibro.year
-          } : libro
-        )
-      );
-      
-      setEditandoLibro(null);
-      mostrarAlerta("Libro actualizado correctamente", "exito");
-    } catch (err) {
-      mostrarAlerta(err.message, "error");
-    }
-  };
-
-  const confirmarEliminacion = (libro) => {
-    setLibroAEliminar(libro);
-    setMostrarConfirmacion(true);
-  };
-
-  const cancelarEliminacion = () => {
-    setMostrarConfirmacion(false);
-    setLibroAEliminar(null);
-  };
-
-  const handleEliminar = async () => {
-    try {
-      const response = await fetch(`${API_URL}/${libroAEliminar.id}`, {
-        method: 'DELETE',
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error al eliminar el libro");
-      }
-
-      setLibros(prevLibros => prevLibros.filter(libro => libro.id !== libroAEliminar.id));
-      setMostrarConfirmacion(false);
-      mostrarAlerta("Libro eliminado correctamente", "exito");
-    } catch (err) {
-      mostrarAlerta(err.message, "error");
-    }
-  };
-
-  const librosFiltrados = libros
-    .filter(libro => 
-      libro.title?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      libro.author?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      String(libro.year || "").includes(busqueda)
-    )
-    .sort((a, b) => {
-      const valorA = a[orden.campo]?.toString().toLowerCase() || "";
-      const valorB = b[orden.campo]?.toString().toLowerCase() || "";
-      
-      if (valorA < valorB) return orden.direccion === 'asc' ? -1 : 1;
-      if (valorA > valorB) return orden.direccion === 'asc' ? 1 : -1;
-      return 0;
-    });
+  const {
+    libros,
+    cargando,
+    error,
+    busqueda,
+    setBusqueda,
+    orden,
+    handleOrdenar,
+    editandoLibro,
+    formularioLibro,
+    handleEditar,
+    handleCancelarEdicion,
+    handleChangeFormulario,
+    handleGuardarEdicion,
+    mostrarConfirmacion,
+    libroAEliminar,
+    confirmarEliminacion,
+    cancelarEliminacion,
+    handleEliminar,
+    mensajeAlerta,
+    cargarLibros,
+    librosFiltrados
+  } = useLibros();
 
   if (cargando) return (
     <div className={styles.appContainer}>
@@ -202,8 +68,6 @@ export default function VerLibros() {
             Explora y gestiona tu colección literaria ({libros.length} libros registrados)
           </p>
         </div>
-
- 
 
         {mensajeAlerta.texto && (
           <div className={mensajeAlerta.tipo === "exito" ? styles.alertaExito : styles.alertaError}>

@@ -1,7 +1,7 @@
 // src/pages/admin/AdminList.jsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAdmins, deleteAdmin, updateAdmin } from '../../services/adminService';
+import { getAdmins, deleteAdmin, updateAdmin } from '../../infrastructure/services/adminService';
 import styles from '../../styles/AdminList.module.css';
 
 export default function AdminList() {

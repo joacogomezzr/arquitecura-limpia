@@ -1,0 +1,169 @@
+/* src/styles/AgregarLibro.module.css */
+.appContainer {
+    min-height: 100vh;
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .mainContent {
+    padding: 2.5rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .pageHeader {
+    background: linear-gradient(to right, #ffffff, #f9f9f9);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .iconContainer {
+    width: 70px;
+    height: 70px;
+    background-color: #e1f5fe;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  
+  .pageIcon {
+    font-size: 2rem;
+  }
+  
+  .pageTitle {
+    color: #2a5298;
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .pageDescription {
+    color: #546e7a;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .formContainer {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2a5298;
+  }
+  
+  .formGroup input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .formGroup input:focus {
+    outline: none;
+    border-color: #2a5298;
+    box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.2);
+  }
+  
+  .formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .btnPrimary, .btnSecondary {
+    padding: 0.8rem 1.8rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btnPrimary {
+    background-color: #2a5298;
+    color: white;
+  }
+  
+  .btnPrimary:hover {
+    background-color: #1e3c72;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btnSecondary {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .btnSecondary:hover {
+    background-color: #d0d0d0;
+    transform: translateY(-2px);
+  }
+  
+  .alerta {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .exito {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+  
+  .error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @media (max-width: 768px) {
+    .mainContent {
+      padding: 1.5rem 1rem;
+    }
+    
+    .formGrid {
+      grid-template-columns: 1fr;
+    }
+    
+    .formActions {
+      flex-direction: column-reverse;
+    }
+    
+    .btnPrimary, .btnSecondary {
+      width: 100%;
+    }
+  }

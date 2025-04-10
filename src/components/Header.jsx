@@ -13,7 +13,7 @@ export default function Header() {
         <Link to="/agregar" className="nav-link add">Agregar Libro</Link>
         <Link to="/ver" className="nav-link view">Ver Libros</Link>
         <Link to="/admin/agregar" className="nav-link admin">Agregar Usuario</Link>
-        <Link to="/admin/listar" className="nav-link list">Ver Admins</Link>
+      
       </nav>
       
       <style jsx>{`
